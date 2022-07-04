@@ -9,17 +9,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WorstCaseSuiteFitness extends TestSuiteFitnessFunction {
+public class WorstCaseCoverageSuiteFitness extends TestSuiteFitnessFunction {
     private final List<WorstCaseCoverageTestFitness> allWorstCases = new ArrayList<>();
 
-    public WorstCaseSuiteFitness() {
+    public WorstCaseCoverageSuiteFitness() {
         allWorstCases.addAll(new WorstCaseCoverageFactory().getCoverageGoals());
     }
 
     @Override
     public double getFitness(TestSuiteChromosome suite) {
-        double fitness = 0.0;
+        double fitness;
         List<ExecutionResult> executionResults = runTestSuite(suite);
+
+
         Set<WorstCaseCoverageTestFitness> coveredWorstCases = new HashSet<>();
         for(WorstCaseCoverageTestFitness goal : allWorstCases) {
             for(ExecutionResult result : executionResults) {

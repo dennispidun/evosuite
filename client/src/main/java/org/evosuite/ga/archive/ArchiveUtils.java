@@ -40,6 +40,7 @@ import org.evosuite.coverage.mutation.StrongMutationTestFitness;
 import org.evosuite.coverage.mutation.WeakMutationTestFitness;
 import org.evosuite.coverage.rho.RhoCoverageTestFitness;
 import org.evosuite.coverage.statement.StatementCoverageTestFitness;
+import org.evosuite.coverage.worstcase.WorstCaseCoverageTestFitness;
 import org.evosuite.ga.FitnessFunction;
 import org.evosuite.runtime.util.AtMostOnceLogger;
 import org.evosuite.testcase.TestChromosome;
@@ -146,6 +147,11 @@ public final class ArchiveUtils {
                     break;
                 case METHODNOEXCEPTION:
                     if (goal instanceof MethodNoExceptionCoverageTestFitness) {
+                        return true;
+                    }
+                    break;
+                case WORSTCASE:
+                    if (goal instanceof WorstCaseCoverageTestFitness) {
                         return true;
                     }
                     break;

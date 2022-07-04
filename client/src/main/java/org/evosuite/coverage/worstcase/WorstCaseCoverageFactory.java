@@ -1,6 +1,6 @@
 package org.evosuite.coverage.worstcase;
 
-import jdk.internal.org.objectweb.asm.Type;
+import org.objectweb.asm.Type;
 import org.evosuite.Properties;
 import org.evosuite.setup.TestUsageChecker;
 import org.evosuite.testsuite.AbstractFitnessFactory;

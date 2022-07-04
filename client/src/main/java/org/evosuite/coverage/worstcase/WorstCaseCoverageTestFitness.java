@@ -1,5 +1,6 @@
 package org.evosuite.coverage.worstcase;
 
+import org.evosuite.Properties;
 import org.evosuite.testcase.TestChromosome;
 import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testcase.execution.ExecutionResult;
@@ -8,19 +9,30 @@ import java.util.Objects;
 
 public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
 
-    private String className;
-    private String methodName;
+    private final String className;
+    private final String methodName;
 
     public WorstCaseCoverageTestFitness(String className, String methodName) {
         this.className = className;
         this.methodName = methodName;
     }
 
+
+    /*
+        0 => GUT
+        1 => SCHLECHT
+     */
     @Override
     public double getFitness(TestChromosome individual, ExecutionResult result) {
-        int executedStatements = result.getExecutedStatements();
+
+        long time = Properties.TIMEOUT - result.getExecutionTime() - 100;
+
+        if (result.hasTimeout()) {
+            time = Properties.TIMEOUT;
+        }
+
         int testSize = result.test.size();
-        return executedStatements + testSize;
+        return time + testSize; // 0
     }
 
     @Override
