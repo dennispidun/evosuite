@@ -21,7 +21,6 @@ public class WorstCaseCoverageSuiteFitness extends TestSuiteFitnessFunction {
         double fitness;
         List<ExecutionResult> executionResults = runTestSuite(suite);
 
-
         Set<WorstCaseCoverageTestFitness> coveredWorstCases = new HashSet<>();
         for(WorstCaseCoverageTestFitness goal : allWorstCases) {
             for(ExecutionResult result : executionResults) {

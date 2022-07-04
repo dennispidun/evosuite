@@ -1,6 +1,7 @@
 package org.evosuite.coverage.worstcase;
 
 import com.examples.with.different.packagename.ForParamMethod;
+import com.examples.with.different.packagename.HighConstant;
 import org.evosuite.EvoSuite;
 import org.evosuite.Properties;
 import org.evosuite.SystemTestBase;
@@ -8,8 +9,8 @@ import org.evosuite.ga.metaheuristics.GeneticAlgorithm;
 import org.evosuite.strategy.TestGenerationStrategy;
 import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testsuite.TestSuiteChromosome;
+import org.junit.Assert;
 import org.junit.Test;
-
 
 public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
 
@@ -17,22 +18,13 @@ public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
     public void name() {
         EvoSuite evosuite = new EvoSuite();
 
-        String targetClass = ForParamMethod.class.getCanonicalName();
+        String targetClass = HighConstant.class.getCanonicalName();
         Properties.TARGET_CLASS = targetClass;
-        //Properties.STRATEGY = Properties.Strategy.ONEBRANCH;
-
-//        Properties.CRITERION = new Properties.Criterion[]{
-//                Properties.Criterion.WORSTCASE
-//        };
-        Properties.OUTPUT_VARIABLES = "TARGET_CLASS,criterion,Coverage,Covered_Goals,Total_Goals";
-        Properties.STATISTICS_BACKEND = Properties.StatisticsBackend.CSV;
-
-        String[] command = new String[]{
-                "-class", targetClass,
-                "-criterion", "WORSTCASE",
-                "-generateSuite"
+        Properties.CRITERION = new Properties.Criterion[]{
+                Properties.Criterion.WORSTCASE
         };
 
+        String[] command = new String[] { "-generateSuite", "-class", targetClass, "-Dalgorithm", "MONOTONIC_GA"};
         Object result = evosuite.parseCommandLine(command);
         GeneticAlgorithm<?> ga = getGAFromResult(result);
         TestSuiteChromosome best = (TestSuiteChromosome) ga.getBestIndividual();
@@ -41,5 +33,8 @@ public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
         for(TestFitnessFunction goal : TestGenerationStrategy.getFitnessFactories().get(0).getCoverageGoals()) {
             System.out.println("Goal: "+goal);
         }
+        int goals = TestGenerationStrategy.getFitnessFactories().get(0).getCoverageGoals().size(); // assuming single fitness function
+        Assert.assertEquals(2, goals );
+        Assert.assertEquals("Non-optimal coverage: ", 1d, best.getCoverage(), 0.001);
     }
 }

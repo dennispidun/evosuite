@@ -17,7 +17,6 @@ public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
         this.methodName = methodName;
     }
 
-
     /*
         0 => GUT
         1 => SCHLECHT
@@ -32,7 +31,7 @@ public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
         }
 
         int testSize = result.test.size();
-        return time + testSize; // 0
+        return time / 3900d; // 0
     }
 
     @Override
