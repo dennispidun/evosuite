@@ -1,5 +1,6 @@
 package org.evosuite.coverage.worstcase;
 
+import org.evosuite.testcase.TestChromosome;
 import org.evosuite.testcase.execution.ExecutionResult;
 import org.evosuite.testsuite.TestSuiteChromosome;
 import org.evosuite.testsuite.TestSuiteFitnessFunction;
@@ -24,7 +25,11 @@ public class WorstCaseCoverageSuiteFitness extends TestSuiteFitnessFunction {
         Set<WorstCaseCoverageTestFitness> coveredWorstCases = new HashSet<>();
         for(WorstCaseCoverageTestFitness goal : allWorstCases) {
             for(ExecutionResult result : executionResults) {
-                if(goal.isCovered(result)) {
+                TestChromosome chromosome = new TestChromosome();
+                chromosome.setTestCase(result.test);
+                chromosome.setLastExecutionResult(result);
+                chromosome.setChanged(false);
+                if(goal.getFitness(chromosome, result) < 0.5) {
                     coveredWorstCases.add(goal);
                     break;
                 }
