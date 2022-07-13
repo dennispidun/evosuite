@@ -6,6 +6,11 @@ public class ForParamMethod {
         int a = 0;
         for (int i = 1; i < n; i++) {
             a += i;
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return a;
     }

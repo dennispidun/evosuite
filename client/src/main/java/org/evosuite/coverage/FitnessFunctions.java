@@ -52,7 +52,7 @@ import org.evosuite.coverage.statement.StatementCoverageSuiteFitness;
 import org.evosuite.coverage.statement.StatementCoverageTestFitness;
 import org.evosuite.coverage.worstcase.WorstCaseCoverageFactory;
 import org.evosuite.coverage.worstcase.WorstCaseCoverageSuiteFitness;
-import org.evosuite.coverage.worstcase.WorstCaseCoverageTestFitness;
+import org.evosuite.coverage.worstcase.WorstCaseExecutionTimeCoverageTestFitness;
 import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testsuite.TestSuiteFitnessFunction;
 import org.slf4j.Logger;
@@ -242,7 +242,7 @@ public class FitnessFunctions {
             case METHODNOEXCEPTION:
                 return MethodNoExceptionCoverageTestFitness.class;
             case WORSTCASE:
-                return WorstCaseCoverageTestFitness.class;
+                return WorstCaseExecutionTimeCoverageTestFitness.class;
             case ONLYLINE:
                 return LineCoverageTestFitness.class;
             case LINE:

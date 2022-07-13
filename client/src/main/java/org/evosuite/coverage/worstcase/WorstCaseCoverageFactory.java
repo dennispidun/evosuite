@@ -1,5 +1,6 @@
 package org.evosuite.coverage.worstcase;
 
+import org.evosuite.testcase.TestFitnessFunction;
 import org.objectweb.asm.Type;
 import org.evosuite.Properties;
 import org.evosuite.setup.TestUsageChecker;
@@ -12,11 +13,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WorstCaseCoverageFactory extends AbstractFitnessFactory<WorstCaseCoverageTestFitness> {
+public class WorstCaseCoverageFactory extends AbstractFitnessFactory<TestFitnessFunction> {
 
     @Override
-    public List<WorstCaseCoverageTestFitness> getCoverageGoals() {
-        List<WorstCaseCoverageTestFitness> goals = new ArrayList<>();
+    public List<TestFitnessFunction> getCoverageGoals() {
+        List<TestFitnessFunction> goals = new ArrayList<>();
         String className = Properties.TARGET_CLASS;
         Class<?> clazz = Properties.getTargetClassAndDontInitialise();
 
@@ -26,8 +27,9 @@ public class WorstCaseCoverageFactory extends AbstractFitnessFactory<WorstCaseCo
 //        for(String constructor : constructors)
 //            goals.add(new WorstCaseCoverageTestFitness(className, constructor));
 
-        for(String method : methods)
-            goals.add(new WorstCaseCoverageTestFitness(className, method));
+        for(String method : methods) {
+            goals.add(new WorstCaseExecutionTimeCoverageTestFitness(className, method));
+        }
 
         return goals;
     }

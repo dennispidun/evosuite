@@ -39,7 +39,7 @@ public class StatementCoverageFitnessFunctionSystemTest extends SystemTestBase {
         Properties.TARGET_CLASS = targetClass;
 
         EvoSuite evosuite = new EvoSuite();
-        String[] command = new String[]{"-class", targetClass, "-generateSuite"};
+        String[] command = new String[]{"-class", targetClass, "-generateSuite", "-Dalgorithm", "MONOTONIC_GA"};
         Object result = evosuite.parseCommandLine(command);
         GeneticAlgorithm<TestSuiteChromosome> ga = getGAFromResult(result);
         TestSuiteChromosome best = ga.getBestIndividual();

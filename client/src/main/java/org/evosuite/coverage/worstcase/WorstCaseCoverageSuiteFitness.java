@@ -1,6 +1,7 @@
 package org.evosuite.coverage.worstcase;
 
 import org.evosuite.testcase.TestChromosome;
+import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testcase.execution.ExecutionResult;
 import org.evosuite.testsuite.TestSuiteChromosome;
 import org.evosuite.testsuite.TestSuiteFitnessFunction;
@@ -11,10 +12,10 @@ import java.util.List;
 import java.util.Set;
 
 public class WorstCaseCoverageSuiteFitness extends TestSuiteFitnessFunction {
-    private final List<WorstCaseCoverageTestFitness> allWorstCases = new ArrayList<>();
+    private final List<TestFitnessFunction> goals = new ArrayList<>();
 
     public WorstCaseCoverageSuiteFitness() {
-        allWorstCases.addAll(new WorstCaseCoverageFactory().getCoverageGoals());
+        goals.addAll(new WorstCaseCoverageFactory().getCoverageGoals());
     }
 
     @Override
@@ -22,26 +23,27 @@ public class WorstCaseCoverageSuiteFitness extends TestSuiteFitnessFunction {
         double fitness;
         List<ExecutionResult> executionResults = runTestSuite(suite);
 
-        Set<WorstCaseCoverageTestFitness> coveredWorstCases = new HashSet<>();
-        for(WorstCaseCoverageTestFitness goal : allWorstCases) {
+        Set<TestFitnessFunction> coveredWorstCases = new HashSet<>();
+        for(TestFitnessFunction goal : goals) {
             for(ExecutionResult result : executionResults) {
                 TestChromosome chromosome = new TestChromosome();
                 chromosome.setTestCase(result.test);
                 chromosome.setLastExecutionResult(result);
                 chromosome.setChanged(false);
-                if(goal.getFitness(chromosome, result) < 0.5) {
+                if(goal.getFitness(chromosome, result) == 0.0) {
                     coveredWorstCases.add(goal);
                     break;
                 }
             }
         }
-        fitness = allWorstCases.size() - coveredWorstCases.size();
-
-        suite.setNumOfCoveredGoals(this, coveredWorstCases.size());
-        if (!allWorstCases.isEmpty())
-            suite.setCoverage(this, (double) (allWorstCases.size() - coveredWorstCases.size()) / (double) allWorstCases.size());
+        fitness = goals.size() - coveredWorstCases.size();
+        if (!goals.isEmpty())
+            suite.setCoverage(this, (double) (goals.size() - coveredWorstCases.size()) / (double) goals.size());
         else
             suite.setCoverage(this, 1.0);
+
+        suite.setNumOfCoveredGoals(this, coveredWorstCases.size());
+
         updateIndividual(suite, fitness);
         return fitness;
     }

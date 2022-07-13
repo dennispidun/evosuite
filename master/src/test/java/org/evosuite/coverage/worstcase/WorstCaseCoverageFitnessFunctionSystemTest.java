@@ -1,7 +1,6 @@
 package org.evosuite.coverage.worstcase;
 
 import com.examples.with.different.packagename.ForParamMethod;
-import com.examples.with.different.packagename.HighConstant;
 import org.evosuite.EvoSuite;
 import org.evosuite.Properties;
 import org.evosuite.SystemTestBase;
@@ -12,6 +11,8 @@ import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testsuite.TestSuiteChromosome;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
 
@@ -37,7 +38,19 @@ public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
             System.out.println("Goal: "+goal);
         }
         int goals = TestGenerationStrategy.getFitnessFactories().get(0).getCoverageGoals().size(); // assuming single fitness function
-        Assert.assertEquals(1, goals );
-        Assert.assertEquals("Non-optimal coverage: ", 1d, best.getCoverage(), 0.001);
+        assertEquals(1, goals );
+        assertEquals("Non-optimal coverage: ", 0d, best.getCoverage(), 0.001);
+    }
+
+    @Test
+    public void name2() {
+        long start = System.currentTimeMillis();
+
+        ForParamMethod forParamMethod0 = new ForParamMethod();
+        int int0 = forParamMethod0.sum(1378);
+        assertEquals(948753, int0);
+
+        long end = System.currentTimeMillis();
+        assertEquals(2300, end-start, 230);
     }
 }

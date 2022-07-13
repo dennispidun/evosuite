@@ -1,10 +1,8 @@
 package org.evosuite.coverage.worstcase;
 
-import org.evosuite.Properties;
 import org.evosuite.testcase.TestChromosome;
 import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testcase.execution.ExecutionResult;
-import org.evosuite.testcase.statements.ConstructorStatement;
 import org.evosuite.testcase.statements.EntityWithParametersStatement;
 import org.evosuite.testcase.statements.MethodStatement;
 import org.evosuite.testcase.statements.Statement;
@@ -12,12 +10,12 @@ import org.evosuite.testcase.statements.Statement;
 import java.util.Objects;
 import java.util.Set;
 
-public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
+public class WorstCaseExecutionTimeCoverageTestFitness extends TestFitnessFunction {
 
     private final String className;
     private final String methodName;
 
-    public WorstCaseCoverageTestFitness(String className, String methodName) {
+    public WorstCaseExecutionTimeCoverageTestFitness(String className, String methodName) {
         this.className = className;
         this.methodName = methodName;
     }
@@ -30,11 +28,11 @@ public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
     public double getFitness(TestChromosome individual, ExecutionResult result) {
         double fitness = 1.0;
 
-        long time = Math.abs(10 - result.getExecutionTime());
+        long time = 10 - result.getExecutionTime();
         if (result.hasTimeout()) {
-            time = Properties.TIMEOUT;
+            time = 0;
         }
-        double timeFitness = (double) time / (double) 10;
+        double timeFitness = (double) Math.max(time, 0) / (double) 10;
 
         int hasSeenMethodCall = 0;
         Set<Integer> exceptionPositions = result.getPositionsWhereExceptionsWereThrown();
@@ -53,10 +51,15 @@ public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
         }
 
         double methodCallFitness = hasSeenMethodCall == 1 ? 0.0 : 1.0;
-
-        fitness = (timeFitness * 0.5 + methodCallFitness * 0.5);
-
         int testSize = result.test.size();
+        double testSizeFitness = testSize <= 3 ? 0.0 : 1.0;
+
+        fitness = (timeFitness * 0.5 + methodCallFitness * 0.25 + testSizeFitness * 0.25);
+
+        if (fitness == 0.0) {
+            individual.getTestCase().addCoveredGoal(this);
+        }
+
         return fitness;
     }
 
@@ -69,7 +72,7 @@ public class WorstCaseCoverageTestFitness extends TestFitnessFunction {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorstCaseCoverageTestFitness that = (WorstCaseCoverageTestFitness) o;
+        WorstCaseExecutionTimeCoverageTestFitness that = (WorstCaseExecutionTimeCoverageTestFitness) o;
         return Objects.equals(className, that.className) && Objects.equals(methodName, that.methodName);
     }
 
