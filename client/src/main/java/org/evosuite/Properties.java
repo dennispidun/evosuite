@@ -978,7 +978,7 @@ public class Properties {
     // ---------------------------------------------------------------
     // Output
     public enum OutputFormat {
-        JUNIT3, JUNIT4, TESTNG, JUNIT5
+        JUNIT3, JUNIT4, TESTNG, JUNIT5, JMH
     }
 
     @Parameter(key = "test_format", group = "Output", description = "Format of the resulting test cases")
@@ -1130,7 +1130,7 @@ public class Properties {
     public static String ALL_GOALS_FILE = REPORT_DIR + File.separator + "all.goals";
 
     @Parameter(key = "write_all_goals_file", group = "Output", description = "If enabled, the list of all goals is written to a file")
-    public static boolean WRITE_ALL_GOALS_FILE = false;
+    public static boolean WRITE_ALL_GOALS_FILE = true;
 
     @Parameter(key = "print_current_goals", group = "Output", description = "Print out current goal during test generation")
     public static boolean PRINT_CURRENT_GOALS = true;

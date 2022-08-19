@@ -1,5 +1,6 @@
 package org.evosuite.coverage.worstcase;
 
+import org.evosuite.Properties;
 import org.evosuite.testcase.TestChromosome;
 import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testcase.execution.ExecutionResult;
@@ -15,6 +16,8 @@ public class WorstCaseExecutionTimeCoverageTestFitness extends TestFitnessFuncti
     private final String className;
     private final String methodName;
 
+    private static long CURRENT_MAX_EXECUTION_TIME = 50;
+
     public WorstCaseExecutionTimeCoverageTestFitness(String className, String methodName) {
         this.className = className;
         this.methodName = methodName;
@@ -28,11 +31,11 @@ public class WorstCaseExecutionTimeCoverageTestFitness extends TestFitnessFuncti
     public double getFitness(TestChromosome individual, ExecutionResult result) {
         double fitness = 1.0;
 
-        long time = 10 - result.getExecutionTime();
+        long time = CURRENT_MAX_EXECUTION_TIME - result.getExecutionTime();
         if (result.hasTimeout()) {
             time = 0;
         }
-        double timeFitness = (double) Math.max(time, 0) / (double) 10;
+        double timeFitness = (double) Math.max(time, 0) / (double) CURRENT_MAX_EXECUTION_TIME;
 
         int hasSeenMethodCall = 0;
         Set<Integer> exceptionPositions = result.getPositionsWhereExceptionsWereThrown();
@@ -61,6 +64,11 @@ public class WorstCaseExecutionTimeCoverageTestFitness extends TestFitnessFuncti
         }
 
         return fitness;
+    }
+
+    @Override
+    public boolean isMaximizationFunction() {
+        return true;
     }
 
     @Override

@@ -221,8 +221,13 @@ public class TestSuiteGenerator {
 
             // progressMonitor.setCurrentPhase("Writing JUnit test cases");
             LoggingUtils.getEvoLogger().info("* " + ClientProcess.getPrettyPrintIdentifier() + "Writing tests to file");
-            result = writeJUnitTestsAndCreateResult(testCases);
-            writeJUnitFailingTests();
+
+            if (Properties.TEST_FORMAT != Properties.OutputFormat.JMH) {
+                result = writeJUnitTestsAndCreateResult(testCases);
+                writeJUnitFailingTests();
+            } else {
+                result = writeJMHBenchmarksAndCreateResult(testCases);
+            }
         }
         TestCaseExecutor.pullDown();
         /*
@@ -235,6 +240,22 @@ public class TestSuiteGenerator {
         LoggingUtils.getEvoLogger().info("");
 
         return result != null ? result : TestGenerationResultBuilder.buildSuccessResult();
+    }
+
+    private TestGenerationResult writeJMHBenchmarksAndCreateResult(TestSuiteChromosome testSuite) {
+        ClientServices.getInstance().getClientNode().changeState(ClientState.WRITING_TESTS);
+        List<TestCase> tests = testSuite.getTests();
+
+        TestSuiteWriter suiteWriter = new TestSuiteWriter();
+        suiteWriter.insertTests(tests);
+
+        String name = Properties.TARGET_CLASS.substring(Properties.TARGET_CLASS.lastIndexOf(".") + 1);
+        String testDir = Properties.TEST_DIR;
+
+        LoggingUtils.getEvoLogger().info("* " + ClientProcess.getPrettyPrintIdentifier() + "Writing JMH test case '"
+                + (name + "_JMHTest") + "' to " + testDir);
+        suiteWriter.writeTestSuite(name + "_JMHTest", testDir, testSuite.getLastExecutionResults());
+        return TestGenerationResultBuilder.buildSuccessResult();
     }
 
     /**

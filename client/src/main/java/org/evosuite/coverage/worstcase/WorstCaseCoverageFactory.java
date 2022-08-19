@@ -25,10 +25,10 @@ public class WorstCaseCoverageFactory extends AbstractFitnessFactory<TestFitness
         Set<String> methods = getUsableMethods(clazz);
 
 //        for(String constructor : constructors)
-//            goals.add(new WorstCaseCoverageTestFitness(className, constructor));
+//            goals.add(new WorstCaseExecutionTimeCoverageTestFitness(className, constructor));
 
         for(String method : methods) {
-            goals.add(new WorstCaseExecutionTimeCoverageTestFitness(className, method));
+            goals.add(new WorstCaseExecutionOnlyTimeCoverageTestFitness(className, method));
         }
 
         return goals;

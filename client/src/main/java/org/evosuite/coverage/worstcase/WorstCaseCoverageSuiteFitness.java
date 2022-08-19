@@ -37,12 +37,15 @@ public class WorstCaseCoverageSuiteFitness extends TestSuiteFitnessFunction {
             }
         }
         fitness = goals.size() - coveredWorstCases.size();
+        System.out.println("coveredWorstCases.size(): " + coveredWorstCases.size());
+        System.out.println("goals.size() : " + goals.size() );
         if (!goals.isEmpty())
             suite.setCoverage(this, (double) (goals.size() - coveredWorstCases.size()) / (double) goals.size());
         else
-            suite.setCoverage(this, 1.0);
+            suite.setCoverage(this, 0.0);
 
         suite.setNumOfCoveredGoals(this, coveredWorstCases.size());
+        suite.setNumOfNotCoveredGoals(this, goals.size() - coveredWorstCases.size());
 
         updateIndividual(suite, fitness);
         return fitness;
