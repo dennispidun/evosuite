@@ -1,1 +1,0 @@
-Tests are now in https://projects.sse.uni-hildesheim.de/svn/reasoning/Model.tests
