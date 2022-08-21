@@ -222,12 +222,8 @@ public class TestSuiteGenerator {
             // progressMonitor.setCurrentPhase("Writing JUnit test cases");
             LoggingUtils.getEvoLogger().info("* " + ClientProcess.getPrettyPrintIdentifier() + "Writing tests to file");
 
-            if (Properties.TEST_FORMAT != Properties.OutputFormat.JMH) {
-                result = writeJUnitTestsAndCreateResult(testCases);
-                writeJUnitFailingTests();
-            } else {
-                result = writeJMHBenchmarksAndCreateResult(testCases);
-            }
+            result = writeJUnitTestsAndCreateResult(testCases);
+            writeJUnitFailingTests();
         }
         TestCaseExecutor.pullDown();
         /*

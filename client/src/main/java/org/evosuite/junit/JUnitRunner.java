@@ -61,7 +61,7 @@ public class JUnitRunner {
 
     public void run() {
 
-        if (Properties.TEST_FORMAT == Properties.OutputFormat.JUNIT4 || Properties.TEST_FORMAT == Properties.OutputFormat.JMH) {
+        if (Properties.TEST_FORMAT == Properties.OutputFormat.JUNIT4) {
             Request request = Request.aClass(this.junitClass);
             logger.warn("Running Junit 4 test");
             JUnitCore junit = new JUnitCore();
