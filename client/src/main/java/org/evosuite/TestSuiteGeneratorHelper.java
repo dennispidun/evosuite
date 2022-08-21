@@ -28,7 +28,6 @@ import org.evosuite.assertion.UnitAssertionGenerator;
 import org.evosuite.contracts.ContractChecker;
 import org.evosuite.coverage.branch.Branch;
 import org.evosuite.coverage.branch.BranchPool;
-import org.evosuite.coverage.worstcase.WorstCaseCoverageSuiteFitness;
 import org.evosuite.rmi.ClientServices;
 import org.evosuite.statistics.RuntimeVariable;
 import org.evosuite.strategy.*;
@@ -90,6 +89,9 @@ public class TestSuiteGeneratorHelper {
                 break;
             case WORSTCASE:
                 LoggingUtils.getEvoLogger().info("  - Worst Case Analysis Method Coverage");
+                break;
+            case WORSTCASEV2:
+                LoggingUtils.getEvoLogger().info("  - Worst Case Analysis Method Coverage V2");
                 break;
             case LINE:
                 LoggingUtils.getEvoLogger().info("  - Line Coverage");

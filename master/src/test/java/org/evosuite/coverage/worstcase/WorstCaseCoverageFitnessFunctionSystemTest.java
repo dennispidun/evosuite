@@ -20,13 +20,14 @@ public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
     public void name() {
         EvoSuite evosuite = new EvoSuite();
 
-        String targetClass = ForParamMethod.class.getCanonicalName();
+        String targetClass = EdgePulse.class.getCanonicalName();
         Properties.TARGET_CLASS = targetClass;
         Properties.CRITERION = new Properties.Criterion[]{
                 Properties.Criterion.WORSTCASE
         };
 
         RuntimeSettings.maxNumberOfIterationsPerLoop = 100_000;
+        Properties.TIMEOUT = 10000;
 
         String[] command = new String[] { "-generateSuite", "-class", targetClass, "-Dalgorithm", "MONOTONIC_GA"};
         Object result = evosuite.parseCommandLine(command);
@@ -38,7 +39,7 @@ public class WorstCaseCoverageFitnessFunctionSystemTest extends SystemTestBase {
             System.out.println("Goal: "+goal);
         }
         int goals = TestGenerationStrategy.getFitnessFactories().get(0).getCoverageGoals().size(); // assuming single fitness function
-        assertEquals(1, goals );
+        assertEquals(10, goals );
         assertEquals("Non-optimal coverage: ", 1d, best.getCoverage(), 0.001);
     }
 }

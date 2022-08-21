@@ -1,4 +1,4 @@
-package org.evosuite.coverage.worstcase;
+package org.evosuite.coverage.worstcaseV1;
 
 import org.evosuite.testcase.TestFitnessFunction;
 import org.objectweb.asm.Type;
@@ -6,14 +6,18 @@ import org.evosuite.Properties;
 import org.evosuite.setup.TestUsageChecker;
 import org.evosuite.testsuite.AbstractFitnessFactory;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WorstCaseCoverageFactory extends AbstractFitnessFactory<TestFitnessFunction> {
+/**
+ * The WorstCaseCoverageFactory is responsible for creating goals.
+ * This version creates the goals based on its methods and defines
+ * exactly one goal per method for the class under test.
+ */
+public class SimpleWorstCaseCoverageFactory extends AbstractFitnessFactory<TestFitnessFunction> {
 
     @Override
     public List<TestFitnessFunction> getCoverageGoals() {
@@ -21,29 +25,13 @@ public class WorstCaseCoverageFactory extends AbstractFitnessFactory<TestFitness
         String className = Properties.TARGET_CLASS;
         Class<?> clazz = Properties.getTargetClassAndDontInitialise();
 
-        Set<String> constructors = getUsableConstructors(clazz);
         Set<String> methods = getUsableMethods(clazz);
 
-//        for(String constructor : constructors)
-//            goals.add(new WorstCaseExecutionTimeCoverageTestFitness(className, constructor));
-
         for(String method : methods) {
-            goals.add(new WorstCaseExecutionOnlyTimeCoverageTestFitness(className, method));
+            goals.add(new WorstCaseCoverageTestFitness(className, method));
         }
 
         return goals;
-    }
-
-    protected Set<String> getUsableConstructors(Class<?> clazz) {
-        Set<String> constructors = new LinkedHashSet<>();
-        Constructor<?>[] allConstructors = clazz.getDeclaredConstructors();
-        for (Constructor<?> c : allConstructors) {
-            if (TestUsageChecker.canUse(c)) {
-                String methodName = "<init>" + Type.getConstructorDescriptor(c);
-                constructors.add(methodName);
-            }
-        }
-        return constructors;
     }
 
     protected Set<String> getUsableMethods(Class<?> clazz) {

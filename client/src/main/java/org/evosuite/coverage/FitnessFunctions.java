@@ -50,9 +50,10 @@ import org.evosuite.coverage.rho.RhoCoverageSuiteFitness;
 import org.evosuite.coverage.statement.StatementCoverageFactory;
 import org.evosuite.coverage.statement.StatementCoverageSuiteFitness;
 import org.evosuite.coverage.statement.StatementCoverageTestFitness;
-import org.evosuite.coverage.worstcase.WorstCaseCoverageFactory;
-import org.evosuite.coverage.worstcase.WorstCaseCoverageSuiteFitness;
-import org.evosuite.coverage.worstcase.WorstCaseExecutionTimeCoverageTestFitness;
+import org.evosuite.coverage.worstcaseV1.SimpleWorstCaseCoverageFactory;
+import org.evosuite.coverage.worstcaseV1.WorstCaseCoverageSuiteFitness;
+import org.evosuite.coverage.worstcaseV1.WorstCaseCoverageTestFitness;
+import org.evosuite.coverage.worstcaseV2.WorstCaseV2CoverageSuiteFitness;
 import org.evosuite.testcase.TestFitnessFunction;
 import org.evosuite.testsuite.TestSuiteFitnessFunction;
 import org.slf4j.Logger;
@@ -117,6 +118,8 @@ public class FitnessFunctions {
                 return new MethodNoExceptionCoverageSuiteFitness();
             case WORSTCASE:
                 return new WorstCaseCoverageSuiteFitness();
+            case WORSTCASEV2:
+                return new WorstCaseV2CoverageSuiteFitness();
             case ONLYLINE:
                 return new OnlyLineCoverageSuiteFitness();
             case LINE:
@@ -178,7 +181,7 @@ public class FitnessFunctions {
             case METHODNOEXCEPTION:
                 return new MethodNoExceptionCoverageFactory();
             case WORSTCASE:
-                return new WorstCaseCoverageFactory();
+                return new SimpleWorstCaseCoverageFactory();
             case LINE:
                 return new LineCoverageFactory();
             case ONLYLINE:
@@ -242,7 +245,9 @@ public class FitnessFunctions {
             case METHODNOEXCEPTION:
                 return MethodNoExceptionCoverageTestFitness.class;
             case WORSTCASE:
-                return WorstCaseExecutionTimeCoverageTestFitness.class;
+                return WorstCaseCoverageTestFitness.class;
+            case WORSTCASEV2:
+                return WorstCaseCoverageTestFitness.class;
             case ONLYLINE:
                 return LineCoverageTestFitness.class;
             case LINE:
